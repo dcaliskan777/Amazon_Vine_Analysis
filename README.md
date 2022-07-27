@@ -150,31 +150,31 @@ The data frame vine_unpaid was created by
 
 Finally, to find aout bies the following codes were written:
 
-> # The number of paid reviews:
+> **The number of paid reviews:**
 > 
 > paid_count=vine_paid_df.count()
 
-> # The number of unpaid reviews:
+> **The number of unpaid reviews:**
 > 
 > unpaid_count=vine_unpaid_df.count()
 >
-> # The number of paid 5-star reviews:
+> **The number of paid 5-star reviews:**
 > 
 > five_star_paid_count=vine_paid_df.filter(vine_paid_df["star_rating"]==5).count()
 >
-> # The number of unpaid 5-star reviews:
+> **The number of unpaid 5-star reviews:**
 > 
 > five_star_unpaid_count=vine_unpaid_df.filter(vine_unpaid_df["star_rating"]==5).count()
 >
-> #The percentage of paid 5-star reviews:
+> **The percentage of paid 5-star reviews:**
 > 
 > five_star_paid_percent=round(100*five_star_paid_count/paid_count,0)
 >
-> #The percentage of unpaid 5-star reviews:
+> **The percentage of unpaid 5-star reviews:**
 > 
 > five_star_unpaid_percent=round(100*five_star_unpaid_count/unpaid_count,0)
 >
-> # The data frame containing all of the above counts
+> **The data frame containing all of the above counts**
 >
 > counts_df=spark.createDataFrame([('paid',paid_count,five_star_paid_count,five_star_paid_percent),
 > 
@@ -188,5 +188,9 @@ These resulsts can be summurized by the following table:
 
 ![](resources/df.jpg)
 
-## Conclusion
+## Summary
+
+Altough the number of paid reviews very very smallar than the number of unpid reviews, the percentage of 5-star paid review is larger than the percentage of 5-star unpaid reviews.
+
+
 
