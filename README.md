@@ -108,13 +108,85 @@ And the picture is
 
 Loading  vine_df to table in RDS, the code is
 
-> customers_df.write.jdbc(url=jdbc_url, table='customers_table', mode=mode, properties=config)
+> vine_df.write.jdbc(url=jdbc_url, table='vine_table', mode=mode, properties=config)
 
 And the picture is
 
 ![](resources/pg5.jpg)
 
-One can find the intire code in the link: ![Amazon_Reviews_ETL](Amazon_Reviews_ETL.ipynb)
+You can find the entire code in the link: ![Amazon_Software_Reviews_ETL](Amazon_Reviews_ETL.ipynb)
+
+### ghkkghkkhgj
+
+The dataset was extracted by the code
+
+>from pyspark import SparkFiles
+>
+>url = "https://s3.amazonaws.com/amazon-reviews-pds/tsv/amazon_reviews_us_Software_v1_00.tsv.gz"
+>
+>spark.sparkContext.addFile(url)
+>
+>df = spark.read.option("encoding", "UTF-8").csv(SparkFiles.get("amazon_reviews_us_Software_v1_00.tsv.gz"), >sep="\t", header=True, inferSchema=True)
+
+The wine table was created by the code 
+
+> vine_df = df.select(["review_id","star_rating","helpful_votes","total_votes","vine","verified_purchase"])
+
+The dataframe was filtered according to "total_votes" greater than or equal to 20 by the code
+
+> tv_more_20_df=vine_df.filter(vine_df['total_votes']>=20)
+
+The data frame was filtered according to the percentage of "helpful_vote" graeter than or equal to 50 as
+
+> vine_new_1_df=tv_more_20_df.filter(tv_more_20_df["helpful_votes"]/tv_more_20_df['total_votes']>=0.5)
+
+The data frame vine_paid was creted by
+
+> vine_paid_df=vine_new_1_df.filter(vine_new_1_df['vine']=="Y")
+
+The data frame vine_unpaid was created by
+
+> vine_unpaid_df=vine_new_1_df.filter(vine_new_1_df['vine']=="N")
+
+Finally, to find aout bies the following codes were written:
+
+> # The number of paid reviews:
+> 
+> paid_count=vine_paid_df.count()
+
+> # The number of unpaid reviews:
+> 
+> unpaid_count=vine_unpaid_df.count()
+>
+> # The number of paid 5-star reviews:
+> 
+> five_star_paid_count=vine_paid_df.filter(vine_paid_df["star_rating"]==5).count()
+>
+> # The number of unpaid 5-star reviews:
+> 
+> five_star_unpaid_count=vine_unpaid_df.filter(vine_unpaid_df["star_rating"]==5).count()
+>
+> #The percentage of paid 5-star reviews:
+> 
+> five_star_paid_percent=round(100*five_star_paid_count/paid_count,0)
+>
+> #The percentage of unpaid 5-star reviews:
+> 
+> five_star_unpaid_percent=round(100*five_star_unpaid_count/unpaid_count,0)
+>
+> # The data frame containing all of the above counts
+>
+> counts_df=spark.createDataFrame([('paid',paid_count,five_star_paid_count,five_star_paid_percent),
+> 
+>                                 ('unpaid',unpaid_count,five_star_unpaid_count,five_star_unpaid_percent)],
+>                                 
+>                                ['vine','total_count','five_star_count','five_star(%)'])
+
+As a result, there are 248 paid reviews from which 102 of them are 5-star. 5-star reviews are 41 % of the toatal paid reviews. Similarly, there are 17514 upaid reviews from which 5154 of them are 5-star. 5-star reviews are 29 % of the total unpaid reviews.  
+
+These resulsts can be summurized by the following table:
+
+![](resources/df.jpg)
 
 ## Conclusion
 
