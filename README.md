@@ -70,7 +70,51 @@ The first 20 rows of the dataframe is given below.
 
 ![](resources/vine.jpg)
 
+I have connect the AWS RDS instance (database16) to load the tables. The code is given below:
 
+> mode = "append"
+> 
+> jdbc_url="jdbc:postgresql://database16.cjdamamvcehe.us-east-2.rds.amazonaws.com:5432/database16"
+> 
+> config = {"user":"postgres", 
+> 
+>          "password": "**********", 
+>          
+>          "driver":"org.postgresql.Driver"}
+
+Loading  review_id_df to table in RDS, the code is
+
+> review_id_df.write.jdbc(url=jdbc_url, table='review_id_table', mode=mode, properties=config)
+
+And the picture is
+
+![](resources/pg2.jpg)
+
+Loading  products_df to table in RDS, the code is
+
+> products_df.write.jdbc(url=jdbc_url, table='products_table', mode=mode, properties=config)
+
+And the picture is
+
+![](resources/pg3.jpg)
+
+Loading  customers_df to table in RDS, the code is
+
+> customers_df.write.jdbc(url=jdbc_url, table='customers_table', mode=mode, properties=config)
+
+And the picture is
+
+![](resources/pg4.jpg)
+
+Loading  vine_df to table in RDS, the code is
+
+> customers_df.write.jdbc(url=jdbc_url, table='customers_table', mode=mode, properties=config)
+
+And the picture is
+
+![](resources/pg5.jpg)
+
+One can find the intire code in the link: ![Amazon_Reviews_ETL](Amazon_Reviews_ETL.ipynb)
 
 ## Conclusion
 
